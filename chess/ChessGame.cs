@@ -15,6 +15,7 @@ namespace Chess_Game.chess
         public HashSet<Piece> pieces;
         public HashSet<Piece> capturedPieces;
         public bool IsGameInCheck;
+        public Piece PieceWithPossibleEnPassantCapture { get; private set; }
 
         public ChessGame()
         {
@@ -23,6 +24,7 @@ namespace Chess_Game.chess
             curentPlayer = PieceColor.Write;
             IsGameFinished = false;
             IsGameInCheck = false;
+            PossibleEnPassantCapture = null;
             pieces = new HashSet<Piece>();
             capturedPieces = new HashSet<Piece>();
             InputPieces();
@@ -138,9 +140,13 @@ namespace Chess_Game.chess
                 }
             }
 
+            //#SpecialMove: EnPassant
 
-
-
+            Piece pieceTestEnPassant = Table.ReturnPiece(destine);
+            if (pieceTestEnPassant is Pawn && (destine.Line == origin.Line - 2 || destine.Line == origin.Line + 2))
+                PossibleEnPassantCapture = pieceTestEnPassant;
+            else
+                PossibleEnPassantCapture = null;
 
         }
 

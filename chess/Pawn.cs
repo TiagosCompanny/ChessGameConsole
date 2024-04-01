@@ -67,6 +67,26 @@ namespace Chess_Game.chess
                     matriz[pos.Line, pos.Column] = true;
                 }
 
+                //#SpecialMove: EnPassant
+                if(position.Line == 3)
+                {
+                    Position leftPosition = new Position(position.Line, position.Column - 1);
+                    if(Table.IsValidPosition(leftPosition) && IsThereEnemy(leftPosition) && Table.ReturnPiece(leftPosition) == game.PieceWithPossibleEnPassantCapture)
+                    {
+                        matriz[leftPosition.Line, leftPosition.Column] = true;
+                    }
+
+                    Position rightPosition = new Position(position.Line, position.Column + 1);
+                    if (Table.IsValidPosition(rightPosition) && IsThereEnemy(rightPosition) && Table.ReturnPiece(rightPosition) == game.PieceWithPossibleEnPassantCapture)
+                    {
+                        matriz[rightPosition.Line, rightPosition.Column] = true;
+                    }
+                }
+
+
+
+
+
             }
             else
             {
@@ -92,6 +112,23 @@ namespace Chess_Game.chess
                 {
                     matriz[pos.Line, pos.Column] = true;
                 }
+
+                //#SpecialMove: EnPassant
+                if (position.Line == 4)
+                {
+                    Position leftPosition = new Position(position.Line, position.Column - 1);
+                    if (Table.IsValidPosition(leftPosition) && IsThereEnemy(leftPosition) && Table.ReturnPiece(leftPosition) == game.PieceWithPossibleEnPassantCapture)
+                    {
+                        matriz[leftPosition.Line, leftPosition.Column] = true;
+                    }
+
+                    Position rightPosition = new Position(position.Line, position.Column + 1);
+                    if (Table.IsValidPosition(rightPosition) && IsThereEnemy(rightPosition) && Table.ReturnPiece(rightPosition) == game.PieceWithPossibleEnPassantCapture)
+                    {
+                        matriz[rightPosition.Line, rightPosition.Column] = true;
+                    }
+                }
+
 
             }
 

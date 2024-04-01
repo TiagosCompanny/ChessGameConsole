@@ -115,7 +115,7 @@ namespace Chess_Game.chess
                     Position position2 = new Position(position.Line, position.Column + 2);
 
                     if (Table.ReturnPiece(position1) == null && Table.ReturnPiece(position2) == null)
-                        matriz[pos.Line, pos.Column + 2] = true;
+                        matriz[position.Line, position.Column + 2] = true;
                 }
                 //#SpecialMove: Castle __Large Castle
                 Position rookPosition_A8 = new Position(position.Line, position.Column - 4);
@@ -126,7 +126,7 @@ namespace Chess_Game.chess
                     Position position3 = new Position(position.Line, position.Column - 2);
 
                     if (Table.ReturnPiece(position1) == null && Table.ReturnPiece(position2) == null && Table.ReturnPiece(position3) == null)
-                        matriz[pos.Line, pos.Column - 2] = true;
+                        matriz[position.Line, position.Column - 2] = true;
                 }
             }
 
