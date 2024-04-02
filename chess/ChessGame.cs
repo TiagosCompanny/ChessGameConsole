@@ -3,6 +3,7 @@ using System.Reflection.Emit;
 using System.Collections.Generic;
 using Tabletop;
 using System.Runtime.ConstrainedExecution;
+using System.Drawing;
 
 namespace Chess_Game.chess
 {
@@ -24,7 +25,7 @@ namespace Chess_Game.chess
             curentPlayer = PieceColor.Write;
             IsGameFinished = false;
             IsGameInCheck = false;
-            PossibleEnPassantCapture = null;
+            PieceWithPossibleEnPassantCapture = null;
             pieces = new HashSet<Piece>();
             capturedPieces = new HashSet<Piece>();
             InputPieces();
@@ -35,13 +36,13 @@ namespace Chess_Game.chess
         {
             Piece piece = Table.RemovePiece(origin);
             piece.IncrementQntMoviments();
-            Piece Caputedpiece = Table.RemovePiece(destine);
+            Piece Capturedpiece = Table.RemovePiece(destine);
 
             Table.InputPiece(piece, destine);
 
-            if (Caputedpiece is not null)
+            if (Capturedpiece is not null)
             {
-                capturedPieces.Add(Caputedpiece);
+                capturedPieces.Add(Capturedpiece);
             }
 
             //#SpecialMove: Litle Castle 
@@ -64,7 +65,25 @@ namespace Chess_Game.chess
                 Table.InputPiece(rookPiece, destineRook);
             }
 
-            return Caputedpiece;
+            //#SpecialMove: En Passant 
+            if (piece is Pawn)
+            {
+                if (origin.Column != destine.Column && Capturedpiece == null)
+                {
+                    Position pawnPosition;
+
+                    if (piece.Color == PieceColor.Write)
+                        pawnPosition = new Position(destine.Line + 1, destine.Column);
+                    else
+                        pawnPosition = new Position(destine.Line - 1, destine.Column);
+
+                    Capturedpiece = Table.RemovePiece(pawnPosition);
+                    capturedPieces.Add(Capturedpiece);
+
+                }
+            }
+
+            return Capturedpiece;
 
         }
 
@@ -102,8 +121,25 @@ namespace Chess_Game.chess
                 Table.InputPiece(rookPiece, orignRook);
             }
 
+            //#SpecialMove: En Passant 
+            if (piece is Pawn)
+            {
+                if(origin.Column != destine.Column && caputedPiece == PieceWithPossibleEnPassantCapture)
+                {
+                    Piece piecePawn = Table.RemovePiece(destine);
 
 
+                    Position pawnPosition;
+
+                    if (piece.Color == PieceColor.Write)
+                        pawnPosition = new Position(3, destine.Column);
+                    else
+                        pawnPosition = new Position(4, destine.Column);
+
+                    Table.InputPiece(piecePawn, pawnPosition);
+
+                }
+            }
         }
 
 
@@ -144,9 +180,9 @@ namespace Chess_Game.chess
 
             Piece pieceTestEnPassant = Table.ReturnPiece(destine);
             if (pieceTestEnPassant is Pawn && (destine.Line == origin.Line - 2 || destine.Line == origin.Line + 2))
-                PossibleEnPassantCapture = pieceTestEnPassant;
+                PieceWithPossibleEnPassantCapture = pieceTestEnPassant;
             else
-                PossibleEnPassantCapture = null;
+                PieceWithPossibleEnPassantCapture = null;
 
         }
 
@@ -308,24 +344,6 @@ namespace Chess_Game.chess
             inputNewPiece('f', 7, new Pawn(Table, PieceColor.Black, this));
             inputNewPiece('g', 7, new Pawn(Table, PieceColor.Black, this));
             inputNewPiece('h', 7, new Pawn(Table, PieceColor.Black, this));
-
-
-
-
-            //inputNewPiece('c', 1, new Rook(Table, PieceColor.Write));
-            //inputNewPiece('c', 2, new Rook(Table, PieceColor.Write));
-            //inputNewPiece('d', 2, new Rook(Table, PieceColor.Write));
-            //inputNewPiece('e', 2, new Rook(Table, PieceColor.Write));
-            //inputNewPiece('e', 1, new Rook(Table, PieceColor.Write));
-            //inputNewPiece('d', 1, new King(Table, PieceColor.Write));
-
-            //inputNewPiece('c', 7, new Rook(Table, PieceColor.Black));
-            //inputNewPiece('c', 8, new Rook(Table, PieceColor.Black));
-            //inputNewPiece('d', 7, new Rook(Table, PieceColor.Black));
-            //inputNewPiece('e', 7, new Rook(Table, PieceColor.Black));
-            //inputNewPiece('e', 8, new Rook(Table, PieceColor.Black));
-            //inputNewPiece('d', 8, new King(Table, PieceColor.Black));
-
         }
 
     }
