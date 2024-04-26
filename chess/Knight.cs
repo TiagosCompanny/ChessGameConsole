@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tabletop;
+﻿using Tabletop;
 
 namespace Chess_Game.chess
 {
     class Knight : Piece
     {
         public Knight(Table table, PieceColor color) : base(table, color)
-        {
-
-        }
-
+        {}
 
         public override string ToString()
         {
@@ -40,7 +32,7 @@ namespace Chess_Game.chess
             if (Table.IsValidPosition(pos) && CanMove(pos))
                 matriz[pos.Line, pos.Column] = true;
 
-            pos.DefineValues(position.Line - 2, position.Column + 1);
+            pos.DefineValues(position.Line + 2, position.Column + 1);
             if (Table.IsValidPosition(pos) && CanMove(pos))
                 matriz[pos.Line, pos.Column] = true;
 
@@ -66,6 +58,5 @@ namespace Chess_Game.chess
 
             return matriz;
         }
-
     }
 }

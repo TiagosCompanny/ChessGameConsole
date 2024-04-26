@@ -2,15 +2,13 @@
 using System.Reflection.Emit;
 using Tabletop;
 
-
 namespace Chess_Game.chess
 {
     class Rook : Piece
     {
         public Rook(Table table, PieceColor color) : base(table, color)
-        {
+        {}
 
-        }
         public override string ToString()
         {
             return "R";
@@ -21,7 +19,6 @@ namespace Chess_Game.chess
             Piece piece = Table.ReturnPiece(position);
             return piece == null || piece.Color != Color;
         }
-
 
         public override bool[,] IsValidMovimentations()
         {
@@ -79,6 +76,5 @@ namespace Chess_Game.chess
 
             return matriz;
         }
-
     }
 }

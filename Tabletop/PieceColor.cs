@@ -3,7 +3,7 @@ namespace Tabletop
 {
     enum PieceColor
     {
-        Write,
+        White,
         Black,
         Yellow,
         Blue,

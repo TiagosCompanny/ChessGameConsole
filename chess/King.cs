@@ -2,7 +2,6 @@
 using System.Net.NetworkInformation;
 using Tabletop;
 
-
 namespace Chess_Game.chess
 {
     class King : Piece
@@ -12,7 +11,6 @@ namespace Chess_Game.chess
         {
             this.game = game;
         }
-
 
         public override string ToString()
         {
@@ -30,32 +28,6 @@ namespace Chess_Game.chess
             Piece piece = Table.ReturnPiece(position);
             return piece != null && piece is Rook && piece.Color == Color && piece.QntMoviments == 0;
         }
-
-
-
-
-        //public override bool[,] IsValidMovimentations()
-        //{
-        //    bool[,] matriz = new bool[Table.Line, Table.Column];
-
-        //    int[] directions = { -1, 0, 1 };
-
-        //    foreach (int i in directions)
-        //    {
-        //        foreach (int j in directions)
-        //        {
-        //            if (i == 0 && j == 0)
-        //                continue; // Ignorar a posição atual
-
-        //            Position pos = new Position(position.Line + i, position.Column + j);
-
-        //            if (Table.IsValidPosition(pos) && CanMove(pos))
-        //                matriz[pos.Line, pos.Column] = true;
-        //        }
-        //    }
-
-        //    return matriz;
-        //}
 
         public override bool[,] IsValidMovimentations()
         {
@@ -103,7 +75,6 @@ namespace Chess_Game.chess
             if (Table.IsValidPosition(pos) && CanMove(pos))
                 matriz[pos.Line, pos.Column] = true;
 
-
             //#SpecialMove: Castle 
             if (QntMoviments == 0 && !game.IsGameInCheck)
             {
@@ -130,12 +101,7 @@ namespace Chess_Game.chess
                 }
             }
 
-
-
-
             return matriz;
         }
-
-
     }
 }

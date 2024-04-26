@@ -1,6 +1,4 @@
-﻿
-
-using Tabletop;
+﻿using Tabletop;
 
 namespace Chess_Game.chess
 {
@@ -19,8 +17,6 @@ namespace Chess_Game.chess
         {
             return new Position(8 - Line, Column - 'a');
         }
-
-
 
         public override string ToString()
         {

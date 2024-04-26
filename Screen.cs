@@ -31,7 +31,7 @@ namespace Chess_Game
         {
             Console.WriteLine("Captured Pieces: ");
             Console.Write("White: ");
-            PrintCapturedPiecesCollection(game.GetCapturedPiecesFromPlayer(PieceColor.Write));
+            PrintCapturedPiecesCollection(game.GetCapturedPiecesFromPlayer(PieceColor.White));
             Console.WriteLine();
             Console.Write("Black: ");
             ConsoleColor auxColor = Console.ForegroundColor;
@@ -110,7 +110,7 @@ namespace Chess_Game
                 Console.Write("- ");
             else
             {
-                if (piece.Color == PieceColor.Write)
+                if (piece.Color == PieceColor.White)
                     Console.Write(piece);
                 else
                 {

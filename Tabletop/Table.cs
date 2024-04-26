@@ -1,6 +1,4 @@
-﻿
-
-namespace Tabletop
+﻿namespace Tabletop
 {
     class Table
     {
@@ -44,7 +42,7 @@ namespace Tabletop
             piece.position = position;
         }
 
-        public Piece RemovePiece(Position position)
+        public Piece? RemovePiece(Position position)
         {
             if (ReturnPiece(position) == null)
                 return null;

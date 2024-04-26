@@ -1,7 +1,5 @@
 ﻿using Chess_Game.chess;
-using System;
 using Tabletop;
-
 
 namespace Chess_Game
 {
@@ -11,9 +9,7 @@ namespace Chess_Game
         {
             try
             {
-
                 ChessGame game = new ChessGame();
-
                 Console.WriteLine();
 
                 while (!game.IsGameFinished)
@@ -45,22 +41,16 @@ namespace Chess_Game
                     {
                         Console.WriteLine(exception.Message);
                         Console.Read();
-                    }   
+                    }              
                 }
-
-
-
+                //Show Winner
+                Console.Clear();
+                Screen.PrintGame(game);
             }
             catch (TableException exception)
             {
                 Console.WriteLine(exception);
             }
-
-
-
-
-
-
         }
     }
 }

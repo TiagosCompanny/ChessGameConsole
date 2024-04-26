@@ -12,9 +12,7 @@ namespace Chess_Game.chess
     class Queen : Piece
     {
         public Queen(Table table, PieceColor color) : base(table, color)
-        {
-        }
-
+        {}
 
         public override string ToString()
         {
@@ -130,8 +128,6 @@ namespace Chess_Game.chess
             }
 
             return matriz;
-
-
         }
     }
 }

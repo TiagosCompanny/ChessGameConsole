@@ -16,13 +16,13 @@ namespace Chess_Game.chess
         public HashSet<Piece> pieces;
         public HashSet<Piece> capturedPieces;
         public bool IsGameInCheck;
-        public Piece PieceWithPossibleEnPassantCapture { get; private set; }
+        public Piece? PieceWithPossibleEnPassantCapture { get; private set; }
 
         public ChessGame()
         {
             Table = new Table(8, 8);
             Turn = 1;
-            curentPlayer = PieceColor.Write;
+            curentPlayer = PieceColor.White;
             IsGameFinished = false;
             IsGameInCheck = false;
             PieceWithPossibleEnPassantCapture = null;
@@ -72,7 +72,7 @@ namespace Chess_Game.chess
                 {
                     Position pawnPosition;
 
-                    if (piece.Color == PieceColor.Write)
+                    if (piece.Color == PieceColor.White)
                         pawnPosition = new Position(destine.Line + 1, destine.Column);
                     else
                         pawnPosition = new Position(destine.Line - 1, destine.Column);
@@ -124,14 +124,14 @@ namespace Chess_Game.chess
             //#SpecialMove: En Passant 
             if (piece is Pawn)
             {
-                if(origin.Column != destine.Column && caputedPiece == PieceWithPossibleEnPassantCapture)
+                if (origin.Column != destine.Column && caputedPiece == PieceWithPossibleEnPassantCapture)
                 {
                     Piece piecePawn = Table.RemovePiece(destine);
 
 
                     Position pawnPosition;
 
-                    if (piece.Color == PieceColor.Write)
+                    if (piece.Color == PieceColor.White)
                         pawnPosition = new Position(3, destine.Column);
                     else
                         pawnPosition = new Position(4, destine.Column);
@@ -154,6 +154,16 @@ namespace Chess_Game.chess
                 throw new TableException("You can not check your King");
             }
 
+            Piece pieceMoved = Table.ReturnPiece(destine);
+            //#SpecialMove: Promotion
+            if (pieceMoved is Pawn)
+            {
+                if ((pieceMoved.Color == PieceColor.White && destine.Line == 0) || (pieceMoved.Color == PieceColor.Black && destine.Line == 7))
+                {
+                    PromoveNewPiece(pieceMoved, destine);
+                }
+            }
+
             if (IsKingInCheck(GetAdversaryColor(curentPlayer)))
                 IsGameInCheck = true;
 
@@ -166,21 +176,20 @@ namespace Chess_Game.chess
             {
                 Turn++;
                 //ChangeColorPlayer
-                if (curentPlayer == PieceColor.Write)
+                if (curentPlayer == PieceColor.White)
                 {
                     curentPlayer = PieceColor.Black;
                 }
                 else
                 {
-                    curentPlayer = PieceColor.Write;
+                    curentPlayer = PieceColor.White;
                 }
             }
 
             //#SpecialMove: EnPassant
 
-            Piece pieceTestEnPassant = Table.ReturnPiece(destine);
-            if (pieceTestEnPassant is Pawn && (destine.Line == origin.Line - 2 || destine.Line == origin.Line + 2))
-                PieceWithPossibleEnPassantCapture = pieceTestEnPassant;
+            if (pieceMoved is Pawn && (destine.Line == origin.Line - 2 || destine.Line == origin.Line + 2))
+                PieceWithPossibleEnPassantCapture = pieceMoved;
             else
                 PieceWithPossibleEnPassantCapture = null;
 
@@ -234,13 +243,13 @@ namespace Chess_Game.chess
 
         private PieceColor GetAdversaryColor(PieceColor cor)
         {
-            if (cor == PieceColor.Write)
+            if (cor == PieceColor.White)
             {
                 return PieceColor.Black;
             }
             else
             {
-                return PieceColor.Write;
+                return PieceColor.White;
             }
         }
         private Piece GetKing(PieceColor color)
@@ -287,7 +296,7 @@ namespace Chess_Game.chess
                         {
                             Position orign = piece.position;
                             Position destine = new Position(i, j);
-                            Piece capturedPiece = ExecuteMoviment(piece.position, new Position(i, j));
+                            Piece capturedPiece = ExecuteMoviment(orign, destine);
                             bool testIsInCheck = IsKingInCheck(color);
                             UndoMove(orign, destine, capturedPiece);
                             if (!testIsInCheck)
@@ -297,7 +306,7 @@ namespace Chess_Game.chess
                     }
                 }
             }
-            return false;
+            return true;
         }
 
         public void inputNewPiece(char column, int line, Piece piece)
@@ -306,27 +315,75 @@ namespace Chess_Game.chess
             pieces.Add(piece);
 
         }
+        private void PromoveNewPiece(Piece pieceMoved, Position destine)
+        {
+            pieceMoved = Table.RemovePiece(destine);
+            pieces.Remove(pieceMoved);
+
+            Piece newPiece;
+            Console.WriteLine("Select which piece will you promove:\n");
+            Console.WriteLine("1 - QUEEN");
+            Console.WriteLine("2 - ROOK");
+            Console.WriteLine("3 - KNIGHT");
+            Console.WriteLine("4 - BISHOP\n");
+
+            string valueSelected = Console.ReadLine();
+
+            int i = 0;
+            if (int.TryParse(valueSelected, out i))
+            {
+                switch (i)
+                {
+                    case 1:
+                        newPiece = new Queen(Table, pieceMoved.Color);
+                        break;
+                    case 2:
+                        newPiece = new Rook(Table, pieceMoved.Color);
+                        break;
+                    case 3:
+                        newPiece = new Knight(Table, pieceMoved.Color);
+                        break;
+                    case 4:
+                        newPiece = new Bishop(Table, pieceMoved.Color);
+                        break;
+                    default:
+                        newPiece = new Queen(Table, pieceMoved.Color);
+                        break;
+                }
+                Table.InputPiece(newPiece, destine);
+                pieces.Add(newPiece);
+            }
+            else
+            {
+                Piece newQueen = new Queen(Table, pieceMoved.Color);
+                Table.InputPiece(newQueen, destine);
+                pieces.Add(newQueen);
+
+            }
+
+        }
+
 
         private void InputPieces()
         {
 
 
-            inputNewPiece('a', 1, new Rook(Table, PieceColor.Write));
-            inputNewPiece('b', 1, new Knight(Table, PieceColor.Write));
-            inputNewPiece('c', 1, new Bishop(Table, PieceColor.Write));
-            inputNewPiece('d', 1, new Queen(Table, PieceColor.Write));
-            inputNewPiece('e', 1, new King(Table, PieceColor.Write, this));
-            inputNewPiece('f', 1, new Bishop(Table, PieceColor.Write));
-            inputNewPiece('g', 1, new Knight(Table, PieceColor.Write));
-            inputNewPiece('h', 1, new Rook(Table, PieceColor.Write));
-            inputNewPiece('a', 2, new Pawn(Table, PieceColor.Write, this));
-            inputNewPiece('b', 2, new Pawn(Table, PieceColor.Write, this));
-            inputNewPiece('c', 2, new Pawn(Table, PieceColor.Write, this));
-            inputNewPiece('d', 2, new Pawn(Table, PieceColor.Write, this));
-            inputNewPiece('e', 2, new Pawn(Table, PieceColor.Write, this));
-            inputNewPiece('f', 2, new Pawn(Table, PieceColor.Write, this));
-            inputNewPiece('g', 2, new Pawn(Table, PieceColor.Write, this));
-            inputNewPiece('h', 2, new Pawn(Table, PieceColor.Write, this));
+            inputNewPiece('a', 1, new Rook(Table, PieceColor.White));
+            inputNewPiece('b', 1, new Knight(Table, PieceColor.White));
+            inputNewPiece('c', 1, new Bishop(Table, PieceColor.White));
+            inputNewPiece('d', 1, new Queen(Table, PieceColor.White));
+            inputNewPiece('e', 1, new King(Table, PieceColor.White, this));
+            inputNewPiece('f', 1, new Bishop(Table, PieceColor.White));
+            inputNewPiece('g', 1, new Knight(Table, PieceColor.White));
+            inputNewPiece('h', 1, new Rook(Table, PieceColor.White));
+            inputNewPiece('a', 2, new Pawn(Table, PieceColor.White, this));
+            inputNewPiece('b', 2, new Pawn(Table, PieceColor.White, this));
+            inputNewPiece('c', 2, new Pawn(Table, PieceColor.White, this));
+            inputNewPiece('d', 2, new Pawn(Table, PieceColor.White, this));
+            inputNewPiece('e', 2, new Pawn(Table, PieceColor.White, this));
+            inputNewPiece('f', 2, new Pawn(Table, PieceColor.White, this));
+            inputNewPiece('g', 2, new Pawn(Table, PieceColor.White, this));
+            inputNewPiece('h', 2, new Pawn(Table, PieceColor.White, this));
 
             inputNewPiece('a', 8, new Rook(Table, PieceColor.Black));
             inputNewPiece('b', 8, new Knight(Table, PieceColor.Black));

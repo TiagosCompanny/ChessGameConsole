@@ -1,6 +1,4 @@
-﻿
-
-using System.Data.Common;
+﻿using System.Data.Common;
 
 namespace Tabletop
 {
@@ -8,7 +6,6 @@ namespace Tabletop
     {
         public int Line { get; set; }
         public int Column { get; set; }
-
 
         public Position(int line, int column)
         {
@@ -26,7 +23,5 @@ namespace Tabletop
         {
             return Line + ", " + Column;
         }
-
-
     }
 }

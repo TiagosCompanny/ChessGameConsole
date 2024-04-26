@@ -10,10 +10,7 @@ namespace Chess_Game.chess
     class Bishop : Piece
     {
         public Bishop(Table table, PieceColor color) : base(table, color)
-        {
-
-        }
-
+        {}
 
         public override string ToString()
         {
@@ -31,7 +28,6 @@ namespace Chess_Game.chess
             bool[,] matriz = new bool[Table.line, Table.column];
 
             Position pos = new Position(0, 0);
-
 
             //⬉
             pos.DefineValues(position.Line - 1, position.Column - 1);
@@ -79,9 +75,5 @@ namespace Chess_Game.chess
 
             return matriz;
         }
-
-
-
-
     }
 }

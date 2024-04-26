@@ -43,12 +43,7 @@ namespace Tabletop
         {
             return IsValidMovimentations()[position.Line, position.Column];
         }
-
-
-
         public abstract bool[,] IsValidMovimentations();
-        
-
-
+       
     }
 }

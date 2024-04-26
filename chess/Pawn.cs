@@ -17,13 +17,10 @@ namespace Chess_Game.chess
         {
             this.game = game;
         }
-
-
         public override string ToString()
         {
             return "P";
         }
-
         private bool IsThereEnemy(Position position)
         {
             Piece piece = Table.ReturnPiece(position);
@@ -33,8 +30,6 @@ namespace Chess_Game.chess
         {
             return Table.ReturnPiece(position) == null;
         }
-
-
         public override bool[,] IsValidMovimentations()
         {
             bool[,] matriz = new bool[Table.line, Table.column];
@@ -42,7 +37,7 @@ namespace Chess_Game.chess
             Position pos = new Position(0, 0);
 
 
-            if (Color == PieceColor.Write)
+            if (Color == PieceColor.White)
             {
 
                 pos.DefineValues(position.Line - 1, position.Column);
@@ -82,15 +77,9 @@ namespace Chess_Game.chess
                         matriz[rightPosition.Line - 1, rightPosition.Column] = true;
                     }
                 }
-
-
-
-
-
             }
             else
             {
-
                 pos.DefineValues(position.Line + 1, position.Column);
                 if (Table.IsValidPosition(pos) && IsFree(pos))
                 {
@@ -128,14 +117,9 @@ namespace Chess_Game.chess
                         matriz[rightPosition.Line + 1, rightPosition.Column] = true;
                     }
                 }
-
-
             }
 
             return matriz;
         }
-
-
-
     }
 }
